@@ -27,6 +27,24 @@ async function run() {
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
+
+
+    // create databse 
+    const memesCollection = client.db("memes").collection("post")
+
+    // to get data from the server
+    app.get('/memes', async (req, res) => {
+        const memes = await memesCollection.find().toArray();
+        res.send(memes);
+    });
+
+    // get data base on single id
+    app.get("/meme/:id", async (req, res) => {
+      const id = req.params;
+      const query = { _id: new ObjectId(id) }
+      const result = await memesCollection.findOne(query)
+      res.send(result);
+    })
   } finally {
   }
 }
