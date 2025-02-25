@@ -32,6 +32,13 @@ async function run() {
     // create databse 
     const memesCollection = client.db("memes").collection("post")
 
+
+    // to post the memes data from the database
+    app.post('/meme', async (req, res) => {
+        const meme = req.body;
+        const result = await memesCollection.insertOne(meme);
+        res.send(result)
+    });
     // to get data from the server
     app.get('/memes', async (req, res) => {
         const memes = await memesCollection.find().toArray();
